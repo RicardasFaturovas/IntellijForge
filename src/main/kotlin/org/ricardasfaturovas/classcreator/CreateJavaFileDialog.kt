@@ -40,11 +40,11 @@ class CreateJavaFileDialog(
                         val name = nameField.text.trim()
                         if (name.isEmpty()) {
                             error("${fileType.displayName} name cannot be empty")
-                        }
-                        if (!isValidJavaIdentifier(name)) {
+                        } else if (!isValidJavaIdentifier(name)) {
                             error("Invalid ${fileType.displayName.lowercase()} name")
-                        }
-                        else {
+                        } else if (fileExistsInPackage(name, getPackageFieldText())) {
+                            error("${fileType.displayName} '$name' already exists in this package")
+                        } else {
                             null
                         }
                     }
@@ -151,6 +151,50 @@ class CreateJavaFileDialog(
         }
 
         return javaPackageName
+    }
+
+    private fun fileExistsInPackage(fileName: String, packageName: String): Boolean {
+        if (fileName.isEmpty()) return false
+
+        try {
+            val (sourceRoot, javaPackageName) = parseFullPackageName(packageName)
+            val packageDir = findPackageDirectory(sourceRoot, javaPackageName) ?: return false
+
+            val expectedFileName = "$fileName.java"
+            val existingFile = packageDir.findChild(expectedFileName)
+
+            return existingFile != null
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
+    private fun parseFullPackageName(fullPackageName: String): Pair<VirtualFile, String> {
+        val projectDir = project.guessProjectDir() ?: throw IllegalStateException("Project directory not found")
+        val sourceRoots = ProjectRootManager.getInstance(project).contentSourceRoots
+
+        for (sourceRoot in sourceRoots) {
+            val relativePath = VfsUtil.getRelativePath(sourceRoot, projectDir)?.replace('/', '.') ?: ""
+
+            if (relativePath.isNotEmpty() && fullPackageName.startsWith(relativePath)) {
+                val javaPackageName = fullPackageName.removePrefix("$relativePath.")
+                return Pair(sourceRoot, javaPackageName)
+            }
+        }
+
+        // If no source root prefix matches, use the first source root and treat the whole string as package
+        return Pair(sourceRoots.firstOrNull() ?: projectDir, fullPackageName)
+    }
+
+    private fun findPackageDirectory(sourceRoot: VirtualFile, packageName: String): VirtualFile? {
+        if (packageName.isEmpty()) return sourceRoot
+
+        var current = sourceRoot
+        for (part in packageName.split('.')) {
+            current = current.findChild(part) ?: return null
+            if (!current.isDirectory) return null
+        }
+        return current
     }
 
     private fun getExistingPackages(): List<String> {
