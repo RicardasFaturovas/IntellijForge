@@ -17,28 +17,32 @@ import com.intellij.ui.dsl.builder.panel
 import java.awt.Dimension
 import javax.swing.JComponent
 
-class CreateClassDialog(private val project: Project, private val currentFile: VirtualFile?) : DialogWrapper(project) {
+class CreateJavaFileDialog(
+    private val project: Project,
+    private val currentFile: VirtualFile?,
+    private val fileType: JavaFileType
+) : DialogWrapper(project) {
 
-    private val classNameField = JBTextField()
+    private val nameField = JBTextField()
     private var packageNameField: JComponent = JBTextField()
 
     init {
-        title = "Create Java Class"
+        title = "Create Java ${fileType.displayName}"
         setupInitialPackageField()
         init()
     }
 
     override fun createCenterPanel(): JComponent {
         val panel = panel {
-            row("Class name:") {
-                cell(classNameField)
+            row("${fileType.displayName} name:") {
+                cell(nameField)
                     .validationOnApply {
-                        val className = classNameField.text.trim()
-                        if (className.isEmpty()) {
-                            error("Class name cannot be empty")
+                        val name = nameField.text.trim()
+                        if (name.isEmpty()) {
+                            error("${fileType.displayName} name cannot be empty")
                         }
-                        if (!isValidJavaIdentifier(className)) {
-                            error("Invalid class name")
+                        if (!isValidJavaIdentifier(name)) {
+                            error("Invalid ${fileType.displayName.lowercase()} name")
                         }
                         else {
                             null
@@ -200,8 +204,8 @@ class CreateClassDialog(private val project: Project, private val currentFile: V
     }
 
     override fun getPreferredFocusedComponent(): JComponent {
-        return classNameField
+        return nameField
     }
-    fun getClassName(): String = classNameField.text.trim()
+    fun getName(): String = nameField.text.trim()
     fun getPackageName(): String = getPackageFieldText()
 }

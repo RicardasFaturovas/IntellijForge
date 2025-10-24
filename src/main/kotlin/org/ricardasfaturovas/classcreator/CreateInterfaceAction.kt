@@ -1,0 +1,3 @@
+package org.ricardasfaturovas.classcreator
+
+class CreateInterfaceAction : BaseCreateJavaFileAction(JavaFileType.INTERFACE)

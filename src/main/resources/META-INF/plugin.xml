@@ -28,11 +28,17 @@
 
     </extensions>
     <actions>
-        <action id="org.ricardasfaturovas.classcreator.CreateClassPopupAction"
-                class="org.ricardasfaturovas.classcreator.CreateClassPopupAction"
-                text="Create Class Popup"
-                description="Create a new Java class with package prompt">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
+        <action id="CreateJavaClass" class="org.ricardasfaturovas.classcreator.CreateClassAction" text="Create Java Class">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl cmd C"/>
+        </action>
+        <action id="CreateJavaInterface" class="org.ricardasfaturovas.classcreator.CreateInterfaceAction" text="Create Java Interface">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl cmd I"/>
+        </action>
+        <action id="CreateJavaRecord" class="org.ricardasfaturovas.classcreator.CreateRecordAction" text="Create Java Record">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl cmd R"/>
+        </action>
+        <action id="CreateJavaEnum" class="org.ricardasfaturovas.classcreator.CreateEnumAction" text="Create Java Enum">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl cmd E"/>
         </action>
     </actions>
 </idea-plugin>

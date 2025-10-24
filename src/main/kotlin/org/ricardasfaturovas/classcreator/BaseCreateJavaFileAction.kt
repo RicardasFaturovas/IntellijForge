@@ -10,9 +10,11 @@ import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.*
+import com.intellij.psi.JavaDirectoryService
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiManager
 
-class CreateClassPopupAction : AnAction() {
+abstract class BaseCreateJavaFileAction(private val fileType: JavaFileType) : AnAction() {
 
     override fun getActionUpdateThread(): ActionUpdateThread {
         return ActionUpdateThread.BGT
@@ -22,25 +24,28 @@ class CreateClassPopupAction : AnAction() {
         val project = e.project ?: return
         val virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE)
 
-        val dialog = CreateClassDialog(project, virtualFile)
+        val dialog = CreateJavaFileDialog(project, virtualFile, fileType)
         if (dialog.showAndGet()) {
-            val className = dialog.getClassName()
+            val name = dialog.getName()
             val packageName = dialog.getPackageName()
-            createJavaClass(project, className, packageName)
+            createJavaFile(project, name, packageName, fileType)
         }
     }
 
-    private fun createJavaClass(project: Project, className: String, packageName: String) {
+    private fun createJavaFile(project: Project, name: String, packageName: String, fileType: JavaFileType) {
         WriteCommandAction.runWriteCommandAction(project) {
             val psiManager = PsiManager.getInstance(project)
-
             val (sourceRoot, javaPackageName) = parseFullPackageName(packageName, project)
-
             val packageDir = findOrCreatePackageDirectory(sourceRoot, javaPackageName)
-
             val psiDirectory = psiManager.findDirectory(packageDir) ?: return@runWriteCommandAction
 
-            val file = JavaDirectoryService.getInstance().createClass(psiDirectory, className)
+            val file = when (fileType) {
+                JavaFileType.CLASS -> JavaDirectoryService.getInstance().createClass(psiDirectory, name)
+                JavaFileType.INTERFACE -> JavaDirectoryService.getInstance().createInterface(psiDirectory, name)
+                JavaFileType.ENUM -> JavaDirectoryService.getInstance().createEnum(psiDirectory, name)
+                JavaFileType.RECORD -> JavaDirectoryService.getInstance().createRecord(psiDirectory, name)
+            }
+
             PsiDocumentManager.getInstance(project).commitAllDocuments()
             file.containingFile.navigate(true)
         }
