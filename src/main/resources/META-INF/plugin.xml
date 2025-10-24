@@ -18,11 +18,10 @@
         <br>
         <strong>Features:</strong><br>
         • Create Java classes, interfaces, records, and enums with smart package detection<br>
-        • Keyboard shortcuts: Ctrl+Shift+C (class), Ctrl+Shift+I (interface), Ctrl+Shift+R (record), Ctrl+Shift+E (enum)<br>
+        • Keyboard shortcuts: Ctrl+Shift+J → C (class), Ctrl+Shift+J → I (interface), Ctrl+Shift+J → R (record), Ctrl+Shift+J → E (enum)<br>
+        • On macOS: ⌘+Shift+J → C/I/R/E<br>
         • Auto-completion for package names<br>
         • Automatically opens the created file in the editor<br>
-        <br>
-        Perfect for developers who want to quickly scaffold Java files without navigating through menus.
     ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -36,16 +35,16 @@
     </extensions>
     <actions>
         <action id="CreateJavaClass" class="org.ricardasfaturovas.classcreator.actions.CreateClassAction" text="Create Java Class">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift C"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift J" second-keystroke="C"/>
         </action>
         <action id="CreateJavaInterface" class="org.ricardasfaturovas.classcreator.actions.CreateInterfaceAction" text="Create Java Interface">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift I"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift J" second-keystroke="I"/>
         </action>
         <action id="CreateJavaRecord" class="org.ricardasfaturovas.classcreator.actions.CreateRecordAction" text="Create Java Record">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift R"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift J" second-keystroke="R"/>
         </action>
         <action id="CreateJavaEnum" class="org.ricardasfaturovas.classcreator.actions.CreateEnumAction" text="Create Java Enum">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift E"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift J" second-keystroke="E"/>
         </action>
     </actions>
 </idea-plugin>
