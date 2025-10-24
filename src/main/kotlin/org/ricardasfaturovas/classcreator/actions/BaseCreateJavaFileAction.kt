@@ -1,4 +1,4 @@
-package org.ricardasfaturovas.classcreator
+package org.ricardasfaturovas.classcreator.actions
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
@@ -13,6 +13,8 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.JavaDirectoryService
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiManager
+import org.ricardasfaturovas.classcreator.CreateJavaFileDialog
+import org.ricardasfaturovas.classcreator.JavaFileType
 
 abstract class BaseCreateJavaFileAction(private val fileType: JavaFileType) : AnAction() {
 
