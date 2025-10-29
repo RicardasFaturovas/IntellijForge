@@ -1,4 +1,4 @@
-# Java File Creator Plugin
+# Forge
 
 A lightweight IntelliJ IDEA plugin that allows you to quickly create Java files (classes, interfaces, records, enums) using keyboard shortcuts from any context in the editor.
 
