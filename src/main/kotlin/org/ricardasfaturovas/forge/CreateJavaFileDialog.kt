@@ -1,4 +1,4 @@
-package org.ricardasfaturovas.classcreator
+package org.ricardasfaturovas.forge
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
